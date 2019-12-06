@@ -15,6 +15,8 @@ def analyser_commande():
     parser.add_argument('-ax', '--auto_contre_serveur', action='store_true', help="Jouer en mode automatique contre le serveur avec l'IDUL dans un affichage graphique")
     return parser.parse_args()
 
+#TODO: Entrer ce que les optional arguments font!!!
+
 if __name__ == "__main__":
     print(analyser_commande())
 

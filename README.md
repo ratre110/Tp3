@@ -6,7 +6,7 @@
 Fork le [projet principal](https://github.com/TP2-Python/Tp3.git).
 Copier le lien de votre fork.
 
-Dans votre fork, créer une nouvelle b
+Dans votre fork, créer une nouvelle branche
 
 #### Sur votre ordinateur
 1. Créer un nouveau dossier pour le projet et l'ouvrir avec VS Code.

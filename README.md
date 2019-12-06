@@ -4,14 +4,15 @@
 
 #### Sur GitHub
 Fork le [projet principal](https://github.com/TP2-Python/Tp3.git).
+Copier le lien du repository
 
 #### Sur votre ordinateur
 1. Créer un nouveau dossier pour le projet et l'ouvrir avec VS Code.
 2. Ouvrir un terminal.
-3. Écrire la suite de commandes:
+3. Écrire `git clone (url_de_votre_fork)`
+4. Ouvrir le nouveau dossier créé par git avec VS Code
+5. Exécuter les commandes suivantes:
 ```
-git init
-git remote add origin (url_de_votre_fork)
 git remote add upstream (url_du_projet)
 git checkout -b working_branch
 ```

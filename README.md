@@ -1,6 +1,6 @@
 # Projet phase 3
 
-### Instructions pour que tout roule sur des roues
+### Instructions pour que tout roule comme sur des roues
 
 #### Sur GitHub
 Fork le [projet principal](https://github.com/TP2-Python/Tp3.git).

@@ -19,8 +19,5 @@ git remote add upstream (url_du_projet_principal)
 git checkout -b working_branch
 ```
 Vous avez maintenant une branche local dans laquelle vous pouvez travailler. 
-Pour push dans votre fork, vous n'avez qu'à faire `git push origin master`, puis faire une pull request 
+Pour push dans votre fork, vous n'avez qu'à faire `git push origin (nom_de_votre_branche)`, puis faire une pull request 
 sur GitHub.
-
-C'est une peu différent, je me suis rendu compte qu'on a pas besoin de 2 branches dans notre fork (sur GitHub).
-On va donc toujours push dans origin master et faire nos pull requests à partir de là.

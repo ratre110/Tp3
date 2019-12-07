@@ -21,3 +21,25 @@ git checkout -b working_branch
 Vous avez maintenant une branche locale dans laquelle vous pouvez travailler. 
 Pour push dans votre fork, vous n'avez qu'à faire `git push origin (nom_de_votre_branche)`, puis faire une pull request 
 sur GitHub.
+
+Légende: 1=idul, 2=automate
+   -----------------------------------
+9 | .   .   .   .   .   .   .   .   . |
+  |                                   |
+8 | .   .   .   .   .   .   .   .   . |
+  |                                   |
+7 | .   .   .   2   .   .   .   .   . |
+  |            -------                |
+6 | .   .   .   .   .   .   .   .   . |
+  |                                   |
+5 | .   .   .   .   .   .   .   .   . |
+  |                                   |
+4 | .   .   .   .   .   .   1   .   . |
+  |                                   |
+3 | .   .   .   .   .   .   .   .   . |
+  |                                   |
+2 | .   .   .   .   .   .   .   .   . |
+  |                                   |
+1 | .   .   .   .   .   .   .   .   . |
+--|-----------------------------------
+  | 1   2   3   4   5   6   7   8   9

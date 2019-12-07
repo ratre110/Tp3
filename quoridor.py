@@ -2,6 +2,7 @@
 from collections.abc import Iterable
 import networkx as nx
 from graphe import construire_graphe
+import minimax
 
 
 class Quoridor:
@@ -234,112 +235,15 @@ class Quoridor:
 
         état = self.état_partie()
 
-        if joueur == 1:
-            strJoueur = 'B1'
-            nonstrJoueur = 'B2'
+        pos, type_coup = minimax.calc_best_move(état, joueur)
+
+        if type_coup in ('MH', 'MV'):
+            orientation = 'horizontal' if type_coup == 'MH' else 'vertical'
+            self.placer_mur(joueur, pos, orientation)
         else:
-            strJoueur = 'B2'
-            nonstrJoueur = 'B1'
+            self.déplacer_jeton(joueur, pos)
 
-        graphe = construire_graphe(
-            [joueur['pos'] for joueur in état['joueurs']],
-            état['murs']['horizontaux'],
-            état['murs']['verticaux']
-        )
-
-        if joueur == 1:
-            diff = 1
-        else:
-            diff = -1
-
-        pos_soi = état['joueurs'][joueur - 1]['pos']
-        pos_adversaire = état['joueurs'][joueur - 1 + diff]['pos']
-
-        delta = (
-            nx.shortest_path_length(graphe, (pos_adversaire), nonstrJoueur) -
-            nx.shortest_path_length(graphe, (pos_soi), strJoueur)
-        )
-
-        coup = 'mur' if delta < 0 else 'bouge'
-
-        if coup == 'mur':
-            position_prochaine = nx.shortest_path(
-                graphe, (pos_adversaire), nonstrJoueur)[0]
-            if pos_adversaire[1] - position_prochaine[1] != 0:  # Si bouge verticalement
-                orientation = 'horizontal'
-                position_mur = pos_adversaire
-            else:  # Si bouge horizontalement
-                orientation = 'vertical'
-                # Si bouge vers la droite
-                if pos_adversaire[0] - position_prochaine[0] <= 0:
-                    position_mur = (
-                        position_prochaine[0], position_prochaine[1] - 1)
-                else:  # Si bouge vers la gauche
-                    position_mur = (
-                        position_prochaine[0] - 1, position_prochaine[1] - 1)
-
-            invalide = False
-
-            if orientation == 'horizontal':
-                for mur in état['murs']['horizontaux']:
-                    if mur[1] == position_mur[1]:
-                        if -1 <= mur[0] - position_mur[0] <= 1:  # Si les murs se chevauchent
-                            invalide = True
-
-                for mur in état['murs']['verticaux']:
-                    if position_mur == (mur[0] + 1, mur[1] - 1):
-                        invalide = True
-
-                if not (1 <= position_mur[0] <= 8 and 2 <= position_mur[1] <= 9):
-                    invalide = True
-
-            else:
-                for mur in état['murs']['verticaux']:
-                    print(position_mur[1], mur[1])
-                    if mur[0] == position_mur[0]:
-                        print(position_mur[1], mur[1])
-                        if -1 <= mur[1] - position_mur[1] <= 1:  # Si les murs se chevauchent
-                            print('here')
-                            invalide = True
-
-                for mur in état['murs']['horizontaux']:
-                    if position_mur == (mur[0] - 1, mur[1] + 1):
-                        invalide = True
-
-                if not (2 <= position_mur[0] <= 9 and 1 <= position_mur[1] <= 8):
-                    invalide = True
-
-            if not invalide:
-                if orientation == 'vertical':
-                    print('---', position_mur, orientation, '---')
-                    nouveau_graphe = construire_graphe(
-                        [joueur['pos'] for joueur in état['joueurs']],
-                        état['murs']['horizontaux'],
-                        état['murs']['verticaux'] + [position_mur]
-                    )
-
-                else:
-                    nouveau_graphe = construire_graphe(
-                        [joueur['pos'] for joueur in état['joueurs']],
-                        état['murs']['horizontaux'] + [position_mur],
-                        état['murs']['verticaux']
-                    )
-
-                if not nx.has_path(nouveau_graphe, (pos_adversaire), 'B2'):
-                    invalide = True
-
-            if invalide:
-                coup = 'bouge'
-
-        if coup == 'mur':
-            print(f'Placer mur en {position_mur}, {orientation}')
-            self.placer_mur(joueur, position_mur, orientation)
-
-        else:
-            print(
-                f'Déplacer joueur {joueur} en {nx.shortest_path(graphe, (pos_soi), strJoueur)[1]}')
-            self.déplacer_jeton(joueur, nx.shortest_path(
-                graphe, (pos_soi), strJoueur)[1])
+        
 
     def partie_terminée(self):
         """
@@ -379,7 +283,7 @@ class Quoridor:
                     if tuple(i) == position:
                         raise QuoridorError(
                             'un mur occupe déja cette position')
-                état['murs']['horizontaux'].append(list(position))
+                état['murs']['horizontaux'].append(tuple(position))
             # si la boucle est verticale
             if orientation == 'vertical':
                 # on traite l'erreur en premier
@@ -387,7 +291,7 @@ class Quoridor:
                     if tuple(i) == position:
                         raise QuoridorError(
                             'un mur occupe déja cette position')
-                état['murs']['verticaux'].append(list(position))
+                état['murs']['verticaux'].append(tuple(position))
         if joueur == 2:
             if orientation == 'horizontal':
                 # on traite l'erreure en premier
@@ -395,7 +299,7 @@ class Quoridor:
                     if tuple(i) == position:
                         raise QuoridorError(
                             'un mur occupe déja cette position')
-                état['murs']['horizontaux'].append(list(position))
+                état['murs']['horizontaux'].append(tuple(position))
             # si la boucle est verticale
             if orientation == 'vertical':
                 # on traite l'erreur en premier
@@ -403,26 +307,26 @@ class Quoridor:
                     if tuple(i) == position:
                         raise QuoridorError(
                             'un mur occupe déja cette position')
-                état['murs']['verticaux'].append(list(position))
+                état['murs']['verticaux'].append(tuple(position))
         # erreure si le joueur n'est pas 1 ou 2
         if joueur not in (1, 2):
             raise QuoridorError('le numéro du joueur est autre que 1 ou 2')
         # erreur pour les murs
-        if orientation == 'horizontal':
-            if position[0] < 1 or position[0] >= 8:
-                raise QuoridorError
-            if position[1] < 1 or position[1] > 9:
-                raise QuoridorError(
-                    'la position est invalide pour cette orientation.')
+        # if orientation == 'horizontal':
+        #     if position[0] < 1 or position[0] >= 8:
+        #         raise QuoridorError
+        #     if position[1] < 1 or position[1] > 9:
+        #         raise QuoridorError(
+        #             'la position est invalide pour cette orientation.')
 
-        if orientation == 'vertical':
-            if position[0] < 1 or position[0] > 9:
-                raise QuoridorError
-            if position[1] < 1 or position[1] >= 8:
-                raise QuoridorError(
-                    'la position est invalide pour cette orientation.')
+        # if orientation == 'vertical':
+        #     if position[0] < 1 or position[0] > 9:
+        #         raise QuoridorError
+        #     if position[1] < 1 or position[1] >= 8:
+        #         raise QuoridorError(
+        #             f'la position ({position}) est invalide pour {orientation}.')
 
-        if (état['joueur'][i]['murs'] for i in range(2)) == 0:
+        if (état['joueurs'][i]['murs'] for i in range(2)) == 0:
             raise QuoridorError('le joueur a déjà placé tous ses murs.')
 
         self.murs = état["murs"]
@@ -441,8 +345,9 @@ if __name__ == "__main__":
     partie = Quoridor(['Simon', 'JS'])
     print(partie)
     while 1:
-
+        print("Coup du joueur 1:")
         partie.jouer_coup(1)
         print(partie)
+        print("Coup du joueur 2:")
         partie.jouer_coup(2)
         print(partie)

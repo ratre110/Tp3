@@ -427,6 +427,9 @@ class Quoridor:
 
         self.murs = état["murs"]
 
+    def available_wall_positions(self):
+        '''Retourne un liste de tuples contenant les positions possibles de murs à ajouter'''
+
 class QuoridorError(Exception):
     pass
 

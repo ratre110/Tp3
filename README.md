@@ -18,6 +18,6 @@ Dans votre fork, créer une nouvelle b
 git remote add upstream (url_du_projet_principal)
 git checkout -b working_branch
 ```
-Vous avez maintenant une branche local dans laquelle vous pouvez travailler. 
+Vous avez maintenant une branche locale dans laquelle vous pouvez travailler. 
 Pour push dans votre fork, vous n'avez qu'à faire `git push origin (nom_de_votre_branche)`, puis faire une pull request 
 sur GitHub.

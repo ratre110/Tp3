@@ -1,8 +1,11 @@
 import turtle
 from turtle import *
+import quoridor
 
 class QuoridorX(quoridor):
+
     def afficher(self, état_parties):
+        etat = self.état_parties
 
         #Base 
         turtle.setx(-150)
@@ -62,14 +65,12 @@ class QuoridorX(quoridor):
 
         #Actualiser avec l'état de la partie
         #Insérer joueur
-
-
-
-
-            
-
-
+        x = etat["joueurs"][0]["pos"]
+        y = etat["joueurs"][1]["pos"]
+        penup()
+        forward((x * 30) + 15)
+        left(90)
+        forward((y * 40) + 20)
+        
         end_fill()
         done()
-
-
